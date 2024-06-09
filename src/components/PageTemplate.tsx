@@ -2,7 +2,7 @@ import { Flex, FlexProps } from "@chakra-ui/react";
 import React, { useEffect, useRef } from "react";
 import { useScrollContext } from "../contexts/ScrollContext";
 
-const Page = ({
+const PageTemplate = ({
   first,
   odd,
   children,
@@ -55,4 +55,4 @@ const Page = ({
   );
 };
 
-export default Page;
+export default PageTemplate;
