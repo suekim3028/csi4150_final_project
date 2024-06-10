@@ -15,6 +15,7 @@ const Text = ({
       whiteSpace={"pre-line"}
       wordBreak={"break-all"}
       {...props}
+      color={props["color"] || "black"}
     >
       {children}
     </Flex>
