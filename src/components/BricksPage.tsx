@@ -17,7 +17,7 @@ const brickWidth = 20; // 이미지 하나의 너비
 const brickHeight = 20; // 이미지 하나의 높이
 
 const BricksPage = () => {
-  const { goDown, lock, unlock } = useScrollContext();
+  const { goDown, lock } = useScrollContext();
   const svg1Ref = useRef<SVGSVGElement>(null);
   const svg2Ref = useRef<SVGSVGElement>(null);
 
@@ -37,7 +37,7 @@ const BricksPage = () => {
   });
 
   const unveil = useCallback(() => {
-    lock();
+    lock(3000);
     setShowChart(true);
 
     // 모든 .bar-image 요소의 표시 상태를 토글
@@ -48,8 +48,6 @@ const BricksPage = () => {
       ".barMale, .barFemale, .x-axis-male, .x-axis-female, .y-axis, .grid, .chart-title, .legend-rect-male, .legend-text-male, .legend-rect-female, .legend-text-female"
     );
     elementsToToggle.style("opacity", 1);
-
-    setTimeout(unlock, 3000);
   }, []);
 
   return (

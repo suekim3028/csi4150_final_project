@@ -12,7 +12,7 @@ const margin = { top: 10, right: 100, bottom: 100, left: 30 },
   height = 500 - margin.top - margin.bottom;
 
 const CompareCountriesPage = () => {
-  const { goDown, lock, unlock } = useScrollContext();
+  const { goDown, lock } = useScrollContext();
   const svgRef = useRef<SVGSVGElement>(null);
 
   const [showChart, setShowChart] = useState(false);
@@ -32,7 +32,8 @@ const CompareCountriesPage = () => {
   });
 
   const unveil = useCallback(() => {
-    lock();
+    if (showChart) return goDown();
+    lock(3000);
     setShowChart(true);
     console.log("??");
 
@@ -66,12 +67,10 @@ const CompareCountriesPage = () => {
       .duration(1000)
 
       .style("opacity", 0.2);
-
-    setTimeout(unlock, 3000);
-  }, []);
+  }, [showChart]);
 
   return (
-    <PageTemplate onWheelDown={!showChart ? unveil : goDown} odd>
+    <PageTemplate onWheelDown={unveil} odd>
       <Flex
         flexDir={"column"}
         p={70}

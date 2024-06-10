@@ -9,37 +9,77 @@ import PageTemplate from "./PageTemplate";
 import Text from "./Text";
 
 const OldTermPage = () => {
-  const { goDown, lock, unlock } = useScrollContext();
+  const { goDown, lock } = useScrollContext();
   const divRef = useRef<HTMLDivElement>(null);
 
   const [showAnswer, setShowAnswer] = useState(false);
 
   const render = async () => {
-    const newborn = (await d3.dsv(",", "/data/newborn.csv"))
+    const data = (await d3.dsv(",", "/data/age_type_population.csv"))
       .map((d) => ({
+        ...d,
         year: Number(d.year),
-        newborn: Number(d.newborn),
+        children: Number(d.children),
+        production: Number(d.production),
+        aging: Number(d.production),
       }))
-      .filter((_, i) => i % 3 === 0);
 
-    console.log({ newborn });
+      .filter((_, i) => i % 3 === 0)
+      .reduce((prev, curr) => {
+        return [
+          ...prev,
+          { year: curr.year, name: "children", value: curr.children },
+          { year: curr.year, name: "production", value: curr.production },
+          { year: curr.year, name: "aging", value: curr.aging },
+        ];
+      }, []);
 
+    console.log(data);
     const childPlot = Plot.plot({
       width: 800,
       height: 600,
       marginLeft: 100,
       marginTop: 50,
       marginBottom: 60,
-
       marks: [
-        Plot.barY(newborn, { x: "year", y: "newborn", fill: "transparent" }),
-        Plot.text(newborn, {
-          text: (d) => "\n👶".repeat(Math.floor(d.newborn / 59000)),
-          x: "year",
-          fontSize: 30,
-          lineAnchor: "bottom",
-          y: 0,
-        }),
+        Plot.barY(
+          data,
+          Plot.stackY({
+            x: "year",
+            y: "value",
+            fill: "name",
+            offset: "normalize",
+            tip: true,
+            sort: { color: null, y: "x", reduce: "last" },
+          })
+        ),
+
+        Plot.image(
+          data,
+
+          Plot.stackY(
+            {
+              offset: "normalize",
+            },
+            {
+              x: "year",
+              y: "value",
+              src: (d) => {
+                switch (d.name) {
+                  case "children":
+                    return "baby.svg";
+                  case "production":
+                    return "child.svg";
+                  case "aging":
+                    return "old.svg";
+                }
+              },
+              width: 40,
+            }
+          )
+        ),
+
+        Plot.ruleY([0]),
       ],
     });
 
@@ -51,15 +91,17 @@ const OldTermPage = () => {
   });
 
   const unveil = useCallback(() => {
-    lock();
+    lock(1500);
     setShowAnswer(true);
-    setTimeout(unlock, 1500);
   }, []);
 
   return (
     <PageTemplate onWheelDown={!showAnswer ? unveil : goDown} odd>
       <Flex w="100%" h="100%" flexDirection={"column"} p={40}>
         <Flex flexDir={"column"} p={30}>
+          <Text type="Medium" fontSize={30} mb={40}>
+            아래의 현상을 보고 답해보세요!
+          </Text>
           <Text type="SemiBold" fontSize={42}>
             <span style={{ color: COLORS.RED }}>고령화</span>란 무엇일까요?
           </Text>

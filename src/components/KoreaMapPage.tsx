@@ -8,7 +8,7 @@ import PageTemplate from "./PageTemplate";
 import Text from "./Text";
 
 const KoreaMapPage = () => {
-  const { goDown, lock, unlock } = useScrollContext();
+  const { goDown, lock } = useScrollContext();
 
   const [showAnswer, setShowAnswer] = useState(false);
 
@@ -105,9 +105,8 @@ const KoreaMapPage = () => {
 
   const yearUp = () => {
     if (year === 2050) return goDown();
-    lock();
+    lock(500);
     setYear(year + 1);
-    setTimeout(unlock, 500);
   };
 
   return (

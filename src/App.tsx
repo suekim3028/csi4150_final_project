@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import AlonePage from "./components/AlonePage";
 import BarRacePage from "./components/BarRacePage";
 import BricksPage from "./components/BricksPage";
 import ChildTermPage from "./components/ChildTermPage";
@@ -13,7 +14,6 @@ import ScrollContextProvider from "./contexts/ScrollContext";
 function App() {
   return (
     <ScrollContextProvider>
-      <EffectPage />
       <TitlePage />
       <ChildTermPage />
       <OldTermPage />
@@ -21,6 +21,8 @@ function App() {
       <CompareCountriesPage />
       <BarRacePage />
       <KoreaMapPage />
+      <EffectPage />
+      <AlonePage />
     </ScrollContextProvider>
   );
 }

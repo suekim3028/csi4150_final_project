@@ -9,7 +9,7 @@ import PageTemplate from "./PageTemplate";
 import Text from "./Text";
 
 const ChildTermPage = () => {
-  const { goDown, lock, unlock } = useScrollContext();
+  const { goDown, lock } = useScrollContext();
   const divRef = useRef<HTMLDivElement>(null);
 
   const [showAnswer, setShowAnswer] = useState(false);
@@ -33,6 +33,7 @@ const ChildTermPage = () => {
 
       marks: [
         Plot.barY(newborn, { x: "year", y: "newborn", fill: "transparent" }),
+
         Plot.text(newborn, {
           text: (d) => "\n👶".repeat(Math.floor(d.newborn / 59000)),
           x: "year",
@@ -51,15 +52,18 @@ const ChildTermPage = () => {
   });
 
   const unveil = useCallback(() => {
-    lock();
+    lock(1500);
     setShowAnswer(true);
-    setTimeout(unlock, 1500);
   }, []);
 
   return (
     <PageTemplate onWheelDown={!showAnswer ? unveil : goDown}>
       <Flex w="100%" h="100%" flexDirection={"column"} p={40}>
         <Flex flexDir={"column"} p={30}>
+          <Text type="Medium" fontSize={30} mb={40}>
+            아래의 현상을 보고 답해보세요!
+          </Text>
+
           <Text type="SemiBold" fontSize={42}>
             <span style={{ color: COLORS.RED }}>저출산</span>이란 무엇일까요?
           </Text>
@@ -95,7 +99,13 @@ const ChildTermPage = () => {
               {/*   태어나는 아이의 수가 줄어드는 현상  */}의 수가
             </Text>
 
-            <Text position={"relative"} type="SemiBold" fontSize={36} px={10}>
+            <Text
+              position={"relative"}
+              type="SemiBold"
+              fontSize={36}
+              pl={10}
+              pr={showAnswer ? 0 : 10}
+            >
               줄어드
               <Flex
                 justifyContent={"center"}
@@ -117,7 +127,7 @@ const ChildTermPage = () => {
 
             <Text type="SemiBold" fontSize={36}>
               {/*   태어나는 아이의 수가 줄어드는 현상  */}
-              (하)는 현상
+              {`${showAnswer ? "" : "(하)"}는 현상`}
             </Text>
           </Flex>
         </Flex>

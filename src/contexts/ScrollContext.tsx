@@ -8,21 +8,25 @@ const ScrollContextProvider = ({ children }: { children: React.ReactNode }) => {
   const currentScrollIdx = useRef(0);
   const isScrolling = useRef(false);
 
-  const lock = useCallback(() => {
-    isScrolling.current = true;
-  }, []);
+  const timeoutRef = useRef<number>();
 
-  const unlock = useCallback(() => {
-    isScrolling.current = false;
+  const lock = useCallback((timeout: number) => {
+    if (timeoutRef.current) return;
+
+    isScrolling.current = true;
+    setTimeout(() => {
+      isScrolling.current = false;
+    }, timeout);
   }, []);
 
   const scroll = useCallback((position: "up" | "down") => {
+    console.log(isScrolling.current);
     if (isScrolling.current || !scrollRef.current) return;
 
     if (position === "up" && currentScrollIdx.current === 0) return;
-    if (position === "down" && currentScrollIdx.current === 10) return;
+    if (position === "down" && currentScrollIdx.current === 8) return;
 
-    isScrolling.current = true;
+    lock(2000);
     currentScrollIdx.current =
       position === "up"
         ? currentScrollIdx.current - 1
@@ -30,17 +34,13 @@ const ScrollContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     scrollRef.current.style.transform =
       "translateY(-" + currentScrollIdx.current * 100 + "vh)";
-
-    setTimeout(() => {
-      isScrolling.current = false;
-    }, 1000);
   }, []);
 
   const goUp = useCallback(() => scroll("up"), []);
   const goDown = useCallback(() => scroll("down"), []);
 
   return (
-    <ScrollContext.Provider value={{ goDown, goUp, lock, unlock }}>
+    <ScrollContext.Provider value={{ goDown, goUp, lock }}>
       <div
         ref={scrollRef}
         style={{
@@ -59,8 +59,7 @@ const ScrollContextProvider = ({ children }: { children: React.ReactNode }) => {
 type ScrollContextValue = {
   goDown: () => void;
   goUp: () => void;
-  lock: () => void;
-  unlock: () => void;
+  lock: (timeout: number) => void;
 };
 export const useScrollContext = () => {
   const context = useContext(ScrollContext);
