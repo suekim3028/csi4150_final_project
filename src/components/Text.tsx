@@ -10,7 +10,12 @@ const Text = ({
   children: React.ReactNode;
 } & FlexProps) => {
   return (
-    <Flex fontFamily={`Pretendard-${type} !important`} {...props}>
+    <Flex
+      fontFamily={`Pretendard-${type} !important`}
+      whiteSpace={"pre-line"}
+      wordBreak={"break-all"}
+      {...props}
+    >
       {children}
     </Flex>
   );

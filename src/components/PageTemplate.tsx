@@ -1,5 +1,5 @@
 import { Flex, FlexProps } from "@chakra-ui/react";
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useScrollContext } from "../contexts/ScrollContext";
 
 const PageTemplate = ({
@@ -17,16 +17,19 @@ const PageTemplate = ({
   const scrollRef = useRef<HTMLDivElement>(null);
   const { goUp } = useScrollContext();
 
-  const onWheel = (e: WheelEvent) => {
-    if (e.deltaY > 0) {
-      console.log("down!");
-      // 올라가는거만 얘가 알아서
-      onWheelDown();
-    } else {
-      goUp();
-    }
-    e.stopPropagation();
-  };
+  const onWheel = useCallback(
+    (e: WheelEvent) => {
+      if (e.deltaY > 0) {
+        console.log("down!");
+        // 올라가는거만 얘가 알아서
+        onWheelDown();
+      } else {
+        goUp();
+      }
+      e.stopPropagation();
+    },
+    [onWheelDown]
+  );
 
   useEffect(() => {
     scrollRef.current?.addEventListener("wheel", onWheel);
@@ -34,7 +37,7 @@ const PageTemplate = ({
     return () => {
       scrollRef.current?.removeEventListener("wheel", onWheel);
     };
-  }, []);
+  }, [onWheelDown]);
 
   return (
     <Flex
@@ -50,7 +53,9 @@ const PageTemplate = ({
       bgColor={first ? "rgba(162, 215, 197, 1)" : odd ? "#fff5f5" : "#faf4e3"}
       {...props}
     >
-      {children}
+      <Flex w="100%" h="100%" flexDir={"column"}>
+        {children}
+      </Flex>
     </Flex>
   );
 };

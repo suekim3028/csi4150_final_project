@@ -8,6 +8,14 @@ const ScrollContextProvider = ({ children }: { children: React.ReactNode }) => {
   const currentScrollIdx = useRef(0);
   const isScrolling = useRef(false);
 
+  const lock = useCallback(() => {
+    isScrolling.current = true;
+  }, []);
+
+  const unlock = useCallback(() => {
+    isScrolling.current = false;
+  }, []);
+
   const scroll = useCallback((position: "up" | "down") => {
     if (isScrolling.current || !scrollRef.current) return;
 
@@ -32,7 +40,7 @@ const ScrollContextProvider = ({ children }: { children: React.ReactNode }) => {
   const goDown = useCallback(() => scroll("down"), []);
 
   return (
-    <ScrollContext.Provider value={{ goDown, goUp }}>
+    <ScrollContext.Provider value={{ goDown, goUp, lock, unlock }}>
       <div
         ref={scrollRef}
         style={{
@@ -51,6 +59,8 @@ const ScrollContextProvider = ({ children }: { children: React.ReactNode }) => {
 type ScrollContextValue = {
   goDown: () => void;
   goUp: () => void;
+  lock: () => void;
+  unlock: () => void;
 };
 export const useScrollContext = () => {
   const context = useContext(ScrollContext);
