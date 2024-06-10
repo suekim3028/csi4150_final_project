@@ -46,10 +46,13 @@ const CenterPage = () => {
       .domain(d3.extent(data, (d) => d.YEAR))
       .range([0, width]);
 
-    svg
+    const xAxis = svg
       .append("g")
       .attr("transform", `translate(0,${height})`)
       .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+
+    xAxis.selectAll(".domain").attr("stroke", "black");
+    xAxis.selectAll(".tick").attr("color", "black");
 
     // svg.append("text")
     //   .attr("text-anchor", "end")
@@ -59,7 +62,10 @@ const CenterPage = () => {
 
     const y = d3.scaleLinear().domain([500, 1700]).range([height, 0]);
 
-    svg.append("g").call(d3.axisLeft(y));
+    const yAxis = svg.append("g").call(d3.axisLeft(y));
+
+    yAxis.selectAll(".domain").attr("stroke", "black");
+    yAxis.selectAll(".tick").attr("color", "black");
 
     // svg.append("text")
     //   .attr("text-anchor", "end")
