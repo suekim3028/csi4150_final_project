@@ -91,7 +91,7 @@ const AlonePage = () => {
     if (showChange) {
       goDown();
     } else {
-      lock(500 * 24);
+      lock(200 * 24);
       setShowChange(true);
 
       const int = setInterval(() => {
