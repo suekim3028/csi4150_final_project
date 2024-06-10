@@ -133,22 +133,50 @@ const KoreaMapPage = () => {
 
   return (
     <PageTemplate onWheelDown={yearUp}>
-      <Flex flexDirection={"column"} p={40} flex={1}>
-        <Flex flexDir={"column"} p={30} flex={0}>
-          <Text type="SemiBold" fontSize={42} color={COLORS.RED}>
-            한국 인구구조의 변화
-          </Text>
+      <Flex flex={1} position={"relative"}>
+        <Flex flexDirection={"column"} p={40} flex={1}>
+          <Flex flexDir={"column"} p={30} flex={0}>
+            <Text type="SemiBold" fontSize={42} color={COLORS.RED}>
+              한국 인구구조의 변화
+            </Text>
 
-          <Text type="Medium" fontSize={24} textAlign={"start"}>
-            {`새로 태어난 아기👶와 일을 할 수 있는 청년🧑‍✈️, 65세 이상의 노인👵이 있어요.
+            <Text type="Medium" fontSize={24} textAlign={"start"}>
+              {`새로 태어난 아기👶와 일을 할 수 있는 청년🧑‍✈️, 65세 이상의 노인👵이 있어요.
             그 수가 어떻게 변화하고 있나요?\n지역별로는 어떤 차이가 있나요?`}
-          </Text>
+            </Text>
+          </Flex>
+          <Flex flex={1}>
+            <div
+              ref={containerRef}
+              style={{ width: "100%", height: "100%" }}
+            ></div>
+          </Flex>
         </Flex>
-        <Flex flex={1}>
-          <div
-            ref={containerRef}
-            style={{ width: "100%", height: "100%" }}
-          ></div>
+        <Flex pos={"absolute"} right={100} h="70vh" top={"15vh"}>
+          <Flex
+            h="100%"
+            w={5}
+            bgColor={COLORS.GRAY}
+            rounded={10}
+            opacity={0.5}
+            position={"relative"}
+          ></Flex>
+          <Flex
+            position={"absolute"}
+            top={0}
+            right={-7.5}
+            w={200}
+            justifyContent={"flex-end"}
+            alignItems={"center"}
+            transform={`translate(0px,${
+              (70 * (year - 1 - 1970)) / (2050 - 1970)
+            }vh)`}
+          >
+            <Text type={"Regular"} fontSize={24} mr={10}>
+              {year}년
+            </Text>
+            <Flex bgColor={COLORS.BLUE} rounded={10} height={20} width={20} />
+          </Flex>
         </Flex>
       </Flex>
     </PageTemplate>
