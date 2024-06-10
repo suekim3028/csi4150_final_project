@@ -7,6 +7,7 @@ const PageTemplate = ({
   odd,
   children,
   onWheelDown,
+
   ...props
 }: {
   first?: boolean;
@@ -15,12 +16,12 @@ const PageTemplate = ({
   children: React.ReactNode;
 } & FlexProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { goUp } = useScrollContext();
+  const { goUp, isScrolling } = useScrollContext();
 
   const onWheel = useCallback(
     (e: WheelEvent) => {
+      if (isScrolling.current) return;
       if (e.deltaY > 0) {
-        console.log("down!");
         // 올라가는거만 얘가 알아서
         onWheelDown();
       } else {

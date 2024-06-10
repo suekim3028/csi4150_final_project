@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useContext, useRef } from "react";
+import React, {
+  RefObject,
+  createContext,
+  useCallback,
+  useContext,
+  useRef,
+} from "react";
 
 const ScrollContext = createContext<null | ScrollContextValue>(null);
 
@@ -24,9 +30,9 @@ const ScrollContextProvider = ({ children }: { children: React.ReactNode }) => {
     if (isScrolling.current || !scrollRef.current) return;
 
     if (position === "up" && currentScrollIdx.current === 0) return;
-    if (position === "down" && currentScrollIdx.current === 8) return;
+    if (position === "down" && currentScrollIdx.current === 9) return;
 
-    lock(2000);
+    lock(1000);
     currentScrollIdx.current =
       position === "up"
         ? currentScrollIdx.current - 1
@@ -40,7 +46,7 @@ const ScrollContextProvider = ({ children }: { children: React.ReactNode }) => {
   const goDown = useCallback(() => scroll("down"), []);
 
   return (
-    <ScrollContext.Provider value={{ goDown, goUp, lock }}>
+    <ScrollContext.Provider value={{ goDown, goUp, lock, isScrolling }}>
       <div
         ref={scrollRef}
         style={{
@@ -60,6 +66,7 @@ type ScrollContextValue = {
   goDown: () => void;
   goUp: () => void;
   lock: (timeout: number) => void;
+  isScrolling: RefObject<boolean>;
 };
 export const useScrollContext = () => {
   const context = useContext(ScrollContext);

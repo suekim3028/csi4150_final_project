@@ -3,6 +3,7 @@ import "./App.css";
 import AlonePage from "./components/AlonePage";
 import BarRacePage from "./components/BarRacePage";
 import BricksPage from "./components/BricksPage";
+import CenterPage from "./components/CenterPage";
 import ChildTermPage from "./components/ChildTermPage";
 import CompareCountriesPage from "./components/CompareCountriesPage";
 import EffectPage from "./components/EffectPage";
@@ -23,6 +24,7 @@ function App() {
       <KoreaMapPage />
       <EffectPage />
       <AlonePage />
+      <CenterPage />
     </ScrollContextProvider>
   );
 }

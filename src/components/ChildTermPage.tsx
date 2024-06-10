@@ -11,6 +11,7 @@ import Text from "./Text";
 const ChildTermPage = () => {
   const { goDown, lock } = useScrollContext();
   const divRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const [showAnswer, setShowAnswer] = useState(false);
 
@@ -24,9 +25,17 @@ const ChildTermPage = () => {
 
     console.log({ newborn });
 
+    const parentWidth = containerRef.current?.clientWidth || 800;
+    const parentHeight = containerRef.current?.clientHeight || 600;
+
+    const max = Math.floor(
+      newborn.reduce((p, n) => Math.max(p, n.newborn), 0) / 59000
+    );
+
+    const width = parentWidth * 0.8;
     const childPlot = Plot.plot({
-      width: 800,
-      height: 600,
+      width,
+      height: parentHeight,
       marginLeft: 100,
       marginTop: 50,
       marginBottom: 60,
@@ -37,7 +46,7 @@ const ChildTermPage = () => {
         Plot.text(newborn, {
           text: (d) => "\n👶".repeat(Math.floor(d.newborn / 59000)),
           x: "year",
-          fontSize: 30,
+          fontSize: Math.min(width / 20, parentHeight / 17) * 0.6,
           lineAnchor: "bottom",
           y: 0,
         }),
@@ -52,7 +61,7 @@ const ChildTermPage = () => {
   });
 
   const unveil = useCallback(() => {
-    lock(1500);
+    lock(1000);
     setShowAnswer(true);
   }, []);
 
@@ -90,6 +99,7 @@ const ChildTermPage = () => {
                 border="2px solid gray"
                 transition="1s cubic-bezier(0.5, 0, 0.5, 1)"
                 opacity={showAnswer ? 0 : 1}
+                color={COLORS.BLUE}
               >
                 ?
               </Flex>
@@ -120,6 +130,7 @@ const ChildTermPage = () => {
                 rounded={10}
                 border="2px solid gray"
                 opacity={showAnswer ? 0 : 1}
+                color={COLORS.BLUE}
               >
                 ?
               </Flex>
@@ -132,7 +143,12 @@ const ChildTermPage = () => {
           </Flex>
         </Flex>
 
-        <Flex flex={1} alignItems={"center"} justifyContent={"center"}>
+        <Flex
+          flex={1}
+          alignItems={"center"}
+          justifyContent={"center"}
+          ref={containerRef}
+        >
           <div ref={divRef}></div>
         </Flex>
       </Flex>

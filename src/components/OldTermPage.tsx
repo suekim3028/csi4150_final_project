@@ -13,6 +13,7 @@ const OldTermPage = () => {
   const divRef = useRef<HTMLDivElement>(null);
 
   const [showAnswer, setShowAnswer] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const render = async () => {
     const data = (await d3.dsv(",", "/data/age_type_population.csv"))
@@ -34,10 +35,15 @@ const OldTermPage = () => {
         ];
       }, []);
 
+    const parentWidth = containerRef.current?.clientWidth || 800;
+    const parentHeight = containerRef.current?.clientHeight || 600;
+    const width = parentWidth * 0.6;
+    const height = parentHeight;
+
     console.log(data);
     const childPlot = Plot.plot({
-      width: 800,
-      height: 600,
+      width,
+      height,
       marginLeft: 100,
       marginTop: 50,
       marginBottom: 60,
@@ -74,7 +80,7 @@ const OldTermPage = () => {
                     return "old.svg";
                 }
               },
-              width: 40,
+              width: Math.min(40, width / 18 - 5),
             }
           )
         ),
@@ -106,12 +112,18 @@ const OldTermPage = () => {
             <span style={{ color: COLORS.RED }}>고령화</span>란 무엇일까요?
           </Text>
 
-          <Flex mt={16}>
+          <Flex mt={16} ml={20}>
             <Text type="SemiBold" fontSize={36}>
               전체 인구 가운데
             </Text>
 
-            <Text position={"relative"} type="SemiBold" fontSize={36} px={10}>
+            <Text
+              position={"relative"}
+              type="SemiBold"
+              fontSize={36}
+              px={10}
+              color={COLORS.BLUE}
+            >
               노인 인구
               <Flex
                 justifyContent={"center"}
@@ -126,6 +138,7 @@ const OldTermPage = () => {
                 rounded={10}
                 border="2px solid gray"
                 opacity={showAnswer ? 0 : 1}
+                color={COLORS.BLUE}
               >
                 ?
               </Flex>
@@ -137,7 +150,12 @@ const OldTermPage = () => {
           </Flex>
         </Flex>
 
-        <Flex flex={1} alignItems={"center"} justifyContent={"center"}>
+        <Flex
+          flex={1}
+          alignItems={"center"}
+          justifyContent={"center"}
+          ref={containerRef}
+        >
           <div ref={divRef}></div>
         </Flex>
       </Flex>

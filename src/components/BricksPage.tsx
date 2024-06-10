@@ -37,7 +37,7 @@ const BricksPage = () => {
   });
 
   const unveil = useCallback(() => {
-    lock(3000);
+    lock(1000);
     setShowChart(true);
 
     // 모든 .bar-image 요소의 표시 상태를 토글

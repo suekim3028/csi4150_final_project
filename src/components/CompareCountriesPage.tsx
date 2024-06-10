@@ -101,6 +101,7 @@ const CompareCountriesPage = () => {
 
         <Flex opacity={showChart ? 1 : 0} transition={"1s linear"}>
           <Text
+            cursor={"pointer"}
             color={COLORS.RED}
             type={"Medium"}
             py={8}
@@ -132,6 +133,7 @@ const CompareCountriesPage = () => {
           </Text>
 
           <Text
+            cursor={"pointer"}
             ml={20}
             color={COLORS.BLUE}
             type={"Medium"}
